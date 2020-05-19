@@ -6,7 +6,7 @@
 ## 目的
 
 本プロジェクトは、プログラミング技術向上のために、以下のサイトを使って練習問題を解いた結果を記録しておくためのもの。  
-(yuki coder)[https://yukicoder.me/]  
+[yuki coder](https://yukicoder.me/)
  
 このREADMEは練習問題を解いていく上で考えたこと、気付き、進捗をメモしておく。
  
