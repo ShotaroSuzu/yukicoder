@@ -11,6 +11,9 @@ public class BitSugoroku {
 		new BitSugoroku().execute();
 	}
 
+	
+	//超単純に、すすめるだけ進んで進めなくなったら戻る。という方法を試した結果NG。(そりゃそうだ)  
+	//→途中で戻ったほうが早いケースとかもありそう、そもそも、経路の列挙からやったほうが良いのか？
 	private void execute() {
 		int goalNum = read();
 		int count = 1;
