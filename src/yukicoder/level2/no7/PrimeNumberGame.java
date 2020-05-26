@@ -1,8 +1,7 @@
 package yukicoder.level2.no7;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -22,56 +21,52 @@ import java.util.Set;
  * この時、どちらも負けないように動くと考える。<br>
  * 自然数Nが与えられた時、あなたが勝つことが出来る場合Win、それ以外はLoseを返してください。<br>
  */
-public class PrimeGame {
-	
+public class PrimeNumberGame {
+
 	private static final String WIN_DISPLAY = "Win";
 	private static final String LOSE_DISPLATY = "Lose";
+	private static final int MIN_PRIME_NUMBER = 2;
 
 	public static void main(String[] args) {
-		new PrimeGame().execute();
+		new PrimeNumberGame().execute();
 	}
 
 	private void execute() {
-		int firstNumber = read();
+		int startingNumber = read();
 
-		boolean canWin = isWinnableNumber(firstNumber);
-		
+		boolean canWin = judgeWinnableNumber(startingNumber);
+
 		output(canWin);
 	}
 
-	//数字を順番にカウントアップする
-	//その数字が勝てるかどうかを判定する
-	//2は負ける、3は勝てるというところを先に登録しておく
-	//今まで出てきた素数で引いた数が勝てる場合は、相手が勝ってしまうので負け
-	//今まで出てきた素数で引いた数が勝てない場合は、相手が負けるので勝ち
-	//これを与えられた数字になるまで繰り返す
-	public boolean isWinnableNumber(int firstNumber) {
-		List<Integer> winnableNumbers = new ArrayList<>();
+	public boolean judgeWinnableNumber(int startingNumber) {
+		Set<Integer> winnableNumbers = new HashSet<>();
 		Set<Integer> primeNumbers = new HashSet<>();
-		Integer minPrimeNumber = 2;
-		primeNumbers.add(minPrimeNumber);
-		
-		for (int selfNumber = 2; selfNumber < firstNumber; selfNumber++) {
-			if(isPrimeNumber(selfNumber, primeNumbers)) {
-				primeNumbers.add(selfNumber);
+
+		for (int preprocessingNumber = MIN_PRIME_NUMBER; preprocessingNumber < startingNumber; preprocessingNumber++) {
+			if(isPrime(preprocessingNumber, primeNumbers)) {
+				primeNumbers.add(preprocessingNumber);
 			}
-			for (Integer candidate : primeNumbers) {
-				if(isWinOperation(selfNumber, candidate, winnableNumbers)) {
-					winnableNumbers.add(selfNumber);
-				}
+			if(isWinnable(winnableNumbers, primeNumbers, preprocessingNumber)) {
+				winnableNumbers.add(preprocessingNumber);
 			}
 		}
 
-		for (Integer operationCandidate : primeNumbers) {
-			if(isWinOperation(firstNumber, operationCandidate, winnableNumbers)) {
+		return isWinnable(winnableNumbers, primeNumbers, startingNumber);
+	}
+
+	private boolean isWinnable(Set<Integer> winnableNumbers, Set<Integer> primeNumbers, int currentNumber) {
+		for (Integer operationNumber : primeNumbers) {
+			if(isWinOperation(currentNumber, operationNumber, winnableNumbers)) {
 				return true;
 			}
 		}
 		return false;
+		
 	}
 
-	private boolean isWinOperation(int selfNumber, Integer operationNumber, List<Integer> winnableNumbers) {
-		Integer nextOpponentNumber = selfNumber - operationNumber;
+	private boolean isWinOperation(int currentNumber, Integer operationNumber, Collection<Integer> winnableNumbers) {
+		Integer nextOpponentNumber = currentNumber - operationNumber;
 		if(nextOpponentNumber <= 1) {
 			return false;
 		}
@@ -81,12 +76,9 @@ public class PrimeGame {
 		return true;
 	}
 
-	private boolean isPrimeNumber(int selfNumber, Set<Integer> primeNumbers) {
-		if(selfNumber < 2) {
-			return false;
-		}
+	private boolean isPrime(int targetNumber, Set<Integer> primeNumbers) {
 		for (Integer primeNumber : primeNumbers) {
-			if(selfNumber % primeNumber == 0) {
+			if(targetNumber % primeNumber == 0) {
 				return false;
 			}
 		}
