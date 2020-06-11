@@ -1,12 +1,6 @@
 package yukicoder.level2.no45;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * No.45 回転寿司.
@@ -26,93 +20,60 @@ public class RotationSushi {
 		new RotationSushi().execute();
 	}
 
-
 	private void execute() {
-		List<Integer> sushis = read();
+		int[] sushisTaste = read();
 
-		int maxDeliciousness = calcMaxDeliciousness(sushis);
+		int maxTotalTaste = calcMaxTotalTaste(sushisTaste);
 
-		output(maxDeliciousness);
+		output(maxTotalTaste);
 	}
 
-	//基本方針1.美味しいものから順に取る
-	//基本方針2.端から順に足していく（要素が増えるたびに選び直す）
-	//基本方針3.明らかにまずいものは取らないようにする？
-	//基本方針4.一旦すべて組み合わせて最大値を求める
-	
-	//基本方針4でやってみる
-	int calcMaxDeliciousness(List<Integer> sushis) {
-		Set<List<Integer>> allCombinationByIndex = getAllSushiCombinationByIndex(sushis);
-		int maxDeliciousness = findMaxDeliciousness(allCombinationByIndex, sushis);
-		return maxDeliciousness;
-	}
-
-	private int findMaxDeliciousness(Set<List<Integer>> allCombinationByIndex, List<Integer> sushis) {
-		int maxDeliciousness = 0;
-		for(List<Integer> combinationByIndex : allCombinationByIndex) {
-			int deliciousness = 0;
-			for(Integer index : combinationByIndex) {
-				deliciousness += sushis.get(index);
-			}
-			if(maxDeliciousness < deliciousness) {
-				maxDeliciousness = deliciousness;
-			}
+	/*寿司の数を増やしていくことで最大値を考える。
+	 * 
+	 * 寿司の美味しさ最大値
+	 * =
+	 *  寿司が１個少なかった場合の最大値（つまり、一番最後に回ってくるやつを取らなかったとき）
+	 * or
+	 *  寿司が２個少なかったときの最大値 + 一番最後の寿司の美味しさ
+	 *  
+	 * で求めることができるので、これを漸化式で表現すると。
+	 * An を寿司の美味しさ
+	 * Dn を美味しさの和の最大値とすると以下のように表せる
+	 * D1 = A1
+	 * D2 = A1 (A1 >= A2)
+	 * D2 = A2 (A2 > A1)
+	 * Dn = Dn-1(Dn-1 >= Dn-2 + An)
+	 * Dn = Dn-2 + An(Dn-1 <= Dn-2 + An)
+	 */
+	int calcMaxTotalTaste(int[] sushisTaste) {
+		if(sushisTaste.length <= 1) {
+			return sushisTaste[0];
 		}
-		return maxDeliciousness;
-	}
 
-	private Set<List<Integer>> getAllSushiCombinationByIndex(List<Integer> sushis) {
-		Set<List<Integer>> sushiConmbinationsByIndex = new HashSet<>();
-		Set<List<Integer>> sushiCombinationsByIndexForSearch = new HashSet<>(); 
-		sushiCombinationsByIndexForSearch.add(Arrays.asList(0));
-		if(sushis.size() >= 2) {
-			sushiCombinationsByIndexForSearch.add(Arrays.asList(1));
+		int[]  maxTotalTaste = new int[sushisTaste.length];
+		maxTotalTaste[0] = sushisTaste[0];
+		maxTotalTaste[1] = Math.max(sushisTaste[0], sushisTaste[1]);
+
+		for(int i = 2; i < sushisTaste.length; i++) {
+			maxTotalTaste[i] = Math.max(maxTotalTaste[i - 1], maxTotalTaste[i - 2] + sushisTaste[i]);
 		}
-		return getAllCombinationByIndexRecursively(sushis, sushiConmbinationsByIndex, sushiCombinationsByIndexForSearch);
+
+		return maxTotalTaste[sushisTaste.length - 1];
 	}
-
-
-	private Set<List<Integer>> getAllCombinationByIndexRecursively(List<Integer> sushis, Set<List<Integer>> sushiConmbinationsByIndex, Set<List<Integer>> sushiCombinationsByIndexForSearch) {
-		if (sushiCombinationsByIndexForSearch.isEmpty()) {
-			return sushiConmbinationsByIndex;
-		}
-		Set<List<Integer>> newSushiCombinationsForSearch = new HashSet<>();
-		for(List<Integer> combination : sushiCombinationsByIndexForSearch) {
-			int currentIndex = combination.get(combination.size() - 1); 
-			if(currentIndex >= sushis.size() - 2) {
-				sushiConmbinationsByIndex.add(combination);
-				continue;
-			}
-			if(currentIndex < sushis.size()  - 2) {
-				List<Integer> skipOneCombination = new LinkedList<>(combination);
-				skipOneCombination.add(currentIndex + 2);
-				newSushiCombinationsForSearch.add(skipOneCombination);
-			}
-			if(currentIndex < sushis.size()  - 3) {
-				List<Integer> skipTowCombination = new LinkedList<>(combination);
-				skipTowCombination.add(currentIndex + 3);
-				newSushiCombinationsForSearch.add(skipTowCombination);
-			}
-		}
-		return getAllCombinationByIndexRecursively(sushis, sushiConmbinationsByIndex, newSushiCombinationsForSearch);
-	}
-
 
 	private void output(int maxDeliciousness) {
 		System.out.println(maxDeliciousness);
 	}
 
-	private List<Integer> read() {
+	private int[] read() {
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
-		int length = sc.nextInt();
-		
-		List<Integer> sushi = new ArrayList<>();
-		
-		for (int i = 0; i < length; i++) {
-			sushi.add(sc.nextInt());
-		}
-		return sushi;
-	}
+		int sushiNum = sc.nextInt();
 
+		int[] sushiTastes = new int[sushiNum];
+		for(int i = 0; i < sushiNum; i++) {
+			sushiTastes[i] = sc.nextInt(); 
+		}
+		return sushiTastes;
+	}
 }
