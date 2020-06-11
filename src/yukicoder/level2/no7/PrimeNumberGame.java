@@ -24,7 +24,7 @@ import java.util.Set;
 public class PrimeNumberGame {
 
 	private static final String WIN_DISPLAY = "Win";
-	private static final String LOSE_DISPLATY = "Lose";
+	private static final String LOSE_DISPLAY = "Lose";
 	private static final int MIN_PRIME_NUMBER = 2;
 
 	public static void main(String[] args) {
@@ -43,12 +43,12 @@ public class PrimeNumberGame {
 		Set<Integer> winnableNumbers = new HashSet<>();
 		Set<Integer> primeNumbers = new HashSet<>();
 
-		for (int preprocessingNumber = MIN_PRIME_NUMBER; preprocessingNumber < startingNumber; preprocessingNumber++) {
-			if(isPrime(preprocessingNumber, primeNumbers)) {
-				primeNumbers.add(preprocessingNumber);
+		for (int processingNumber = MIN_PRIME_NUMBER; processingNumber < startingNumber; processingNumber++) {
+			if(isPrime(processingNumber, primeNumbers)) {
+				primeNumbers.add(processingNumber);
 			}
-			if(isWinnable(winnableNumbers, primeNumbers, preprocessingNumber)) {
-				winnableNumbers.add(preprocessingNumber);
+			if(isWinnable(winnableNumbers, primeNumbers, processingNumber)) {
+				winnableNumbers.add(processingNumber);
 			}
 		}
 
@@ -56,8 +56,8 @@ public class PrimeNumberGame {
 	}
 
 	private boolean isWinnable(Set<Integer> winnableNumbers, Set<Integer> primeNumbers, int currentNumber) {
-		for (Integer operationNumber : primeNumbers) {
-			if(isWinOperation(currentNumber, operationNumber, winnableNumbers)) {
+		for (Integer primeNumber : primeNumbers) {
+			if(isWinOperation(currentNumber, primeNumber, winnableNumbers)) {
 				return true;
 			}
 		}
@@ -86,7 +86,7 @@ public class PrimeNumberGame {
 	}
 
 	private void output(boolean canWin) {
-		System.out.println(canWin ? WIN_DISPLAY : LOSE_DISPLATY);
+		System.out.println(canWin ? WIN_DISPLAY : LOSE_DISPLAY);
 	}
 
 	private int read() {

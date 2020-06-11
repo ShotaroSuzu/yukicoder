@@ -9,18 +9,18 @@ public class PrimeNumberGameTest {
 	@Test
 	public void testBySample1() {
 		int input = 5;
-		boolean output = true;
+		boolean expected = true;
 		
 		boolean result = new PrimeNumberGame().judgeWinnableNumber(input);
-		assertEquals(output, result);
+		assertEquals(expected, result);
 	}
 	
 	@Test
 	public void testBySample2() {
 		int input = 12;
-		boolean output = false;
+		boolean expected = false;
 		boolean result = new PrimeNumberGame().judgeWinnableNumber(input);
-		assertEquals(output, result);
+		assertEquals(expected, result);
 	}
 
 	@Test
