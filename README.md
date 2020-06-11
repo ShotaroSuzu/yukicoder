@@ -12,8 +12,8 @@
 ## 今やっていること
 [初心者のためのガイド](https://yukicoder.me/wiki/guide)に従って進めているところ。  
 
-[No.7 プライムナンバーゲーム](https://yukicoder.me/problems/no/7)の問題解答済み。
-次は[No.45 回転寿司](https://yukicoder.me/problems/78)をやりたい
+[No.45 回転寿司](https://yukicoder.me/problems/78)の問題解答済み。
+次は[No.4 おもりと天秤](https://yukicoder.me/problems/19)をやりたい
 
 ## 問題
 ### チュートリアル
