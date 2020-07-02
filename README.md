@@ -13,7 +13,7 @@
 [初心者のためのガイド](https://yukicoder.me/wiki/guide)に従って進めているところ。  
 
 [No.45 回転寿司](https://yukicoder.me/problems/78)の問題解答済み。
-次は[No.4 おもりと天秤](https://yukicoder.me/problems/19)をやりたい
+次は[No.4 おもりと天秤](https://yukicoder.me/problems/19)を部分和問題に読み替えて、部分和問題に帰結。
 
 ## 問題
 ### チュートリアル
